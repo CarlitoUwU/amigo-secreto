@@ -1,30 +1,36 @@
-// El principal objetivo de este desafío es fortalecer tus habilidades en lógica de programación. Aquí deberás desarrollar la lógica para resolver el problema.
+// Fortalece tus habilidades de lógica con este desafío de programación.
 let listaAmigos = [];
 const inputAmigo = document.getElementById('amigo');
 const lista = document.getElementById('listaAmigos');
 const resultado = document.getElementById('resultado');
+const btnSortear = document.getElementById('btnSortear');
 
 function limpiarInput() {
   inputAmigo.value = '';
 }
 
 function agregarAmigo() {
-  if (inputAmigo.value == '') {
-    alert('Por favor, debe ingresar un nombre');
+  if (resultado.textContent) {
+    resetearResultado();
+  }
+
+  const nombre = formatearNombre(inputAmigo.value.trim());
+  if (!nombre) {
+    mostrarAlerta('Por favor, ingrese un nombre.');
     return;
   }
 
-  let nombre = inputAmigo.value;
-  nombre = nombre[0].toUpperCase() + nombre.slice(1).toLowerCase();
-
-  if (!listaAmigos.includes(nombre)) {
+  if (listaAmigos.includes(nombre)) {
+    mostrarAlerta('El amigo ya fue ingresado.');
+  } else {
     agregarAmigoMostrar(nombre);
     listaAmigos.push(nombre);
-    limpiarInput();
-  } else {
-    alert('El amigo ya fue ingresado');
-    limpiarInput();
   }
+  limpiarInput();
+}
+
+function formatearNombre(nombre) {
+  return nombre ? nombre[0].toUpperCase() + nombre.slice(1).toLowerCase() : '';
 }
 
 function agregarAmigoMostrar(nombre) {
@@ -40,14 +46,20 @@ function limpiarLista() {
 
 function sortearAmigo() {
   if (listaAmigos.length < 2) {
-    alert('Debe ingresar al menos dos amigos');
-  } else {
-    const amigoSorteado = listaAmigos[Math.floor(Math.random() * listaAmigos.length)];
-
-    resultado.textContent = `El amigo secreto es: ${amigoSorteado}`;
-
-    limpiarLista();
-
-
+    mostrarAlerta('Debe ingresar al menos dos amigos.');
+    return;
   }
+  const amigoSorteado = listaAmigos[Math.floor(Math.random() * listaAmigos.length)];
+  resultado.textContent = `El amigo secreto es: ${amigoSorteado}`;
+  limpiarLista();
+  btnSortear.disabled = true;
+}
+
+function resetearResultado() {
+  resultado.textContent = '';
+  btnSortear.disabled = false;
+}
+
+function mostrarAlerta(mensaje) {
+  alert(mensaje);
 }
